@@ -5,6 +5,7 @@ import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -24,11 +25,13 @@ public class MainActivity extends Activity  {
     private TextView totalDuration;
     private Button btnNext;
     private int[] videos;
+    private int currentArrayVideoPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initVideoSet();
         init();
         timeLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -76,6 +79,22 @@ public class MainActivity extends Activity  {
         totalDuration = (TextView) findViewById(R.id.totalDuration);
     }
 
+    public void onClickBtnNext(View v){
+
+
+            if (currentArrayVideoPos +1 < videos.length){
+                currentArrayVideoPos = currentArrayVideoPos +1;
+                if(mediaPlayer != null){
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+
+                }
+                Toast.makeText(getApplicationContext(), ""+currentArrayVideoPos, Toast.LENGTH_LONG).show();
+                initVideoPlayer();
+            }
+    }
+
     public void PlayStop(View v){
         try{
             if(mediaPlayer != null){
@@ -91,10 +110,6 @@ public class MainActivity extends Activity  {
             }
             else{
                 initVideoPlayer();
-                mediaPlayer.start();
-                btnPlay.setText("Pause");
-
-                Toast.makeText(getApplicationContext(), "Started video play", Toast.LENGTH_LONG).show();
             }
 
         } catch (Exception e) {
@@ -104,7 +119,7 @@ public class MainActivity extends Activity  {
 
     private void initVideoPlayer(){
         getWindow().setFormat(PixelFormat.UNKNOWN);
-        mediaPlayer = MediaPlayer.create(this, R.raw.video1);
+        mediaPlayer = MediaPlayer.create(this, videos[currentArrayVideoPos]);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         timeLine.setVisibility(View.VISIBLE);
         //surfaceHolder.setFixedSize(176, 144);
@@ -114,11 +129,16 @@ public class MainActivity extends Activity  {
         timeLine.setMax(mediaDuration);
         String TotalDuration = CalculateTime(mediaDuration);
         totalDuration.setText(TotalDuration);
+        mediaPlayer.start();
+        btnPlay.setText("Pause");
+        Toast.makeText(getApplicationContext(), "Started video play", Toast.LENGTH_LONG).show();
     }
 
     private void initVideoSet(){
+        videos = new int[2];
         videos[0] = R.raw.video1;
         videos[1] = R.raw.videoplayback;
+        currentArrayVideoPos = 0;
     }
 
 
