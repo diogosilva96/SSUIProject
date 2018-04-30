@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends Activity  {
@@ -24,6 +22,8 @@ public class MainActivity extends Activity  {
     private MediaPlayer mediaPlayer = null;
     private TextView currentTime;
     private TextView totalDuration;
+    private Button btnNext;
+    private int[] videos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,28 +34,24 @@ public class MainActivity extends Activity  {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    int skipTo = timeLine.getProgress();
-                    mediaPlayer.seekTo(skipTo);
+                    int selectedTime = timeLine.getProgress();
+                    mediaPlayer.seekTo(selectedTime);
                 }
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 mediaPlayer.pause();
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 mediaPlayer.start();
-
             }
         });
 
         MainActivity.this.runOnUiThread(new Runnable() {
-
             @Override
             public void run() {
-                monitorHandler.postDelayed(this, 500);
+                monitorHandler.postDelayed(this, 250);//update de 250ms em 250ms
                 monitorHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -70,9 +66,6 @@ public class MainActivity extends Activity  {
 
     private Handler monitorHandler = new Handler();
 
-
-
-
     private void init() {
         // TODO Auto-generated method stub
         surfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
@@ -82,8 +75,6 @@ public class MainActivity extends Activity  {
         currentTime = (TextView) findViewById(R.id.currentTime);
         totalDuration = (TextView) findViewById(R.id.totalDuration);
     }
-
-
 
     public void PlayStop(View v){
         try{
@@ -113,7 +104,7 @@ public class MainActivity extends Activity  {
 
     private void initVideoPlayer(){
         getWindow().setFormat(PixelFormat.UNKNOWN);
-        mediaPlayer = MediaPlayer.create(this, R.raw.videoplayback);
+        mediaPlayer = MediaPlayer.create(this, R.raw.video1);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         timeLine.setVisibility(View.VISIBLE);
         //surfaceHolder.setFixedSize(176, 144);
@@ -123,10 +114,15 @@ public class MainActivity extends Activity  {
         timeLine.setMax(mediaDuration);
         String TotalDuration = CalculateTime(mediaDuration);
         totalDuration.setText(TotalDuration);
-
     }
 
-    private void mediaPlayerMonitor(){ //monitor que é chamado par atualizar a view
+    private void initVideoSet(){
+        videos[0] = R.raw.video1;
+        videos[1] = R.raw.videoplayback;
+    }
+
+
+    private void mediaPlayerMonitor(){ //monitor que é chamado para atualizar a view
         if (mediaPlayer != null){
             //int mediaDuration = mediaPlayer.getDuration();
             int mediaPosition = mediaPlayer.getCurrentPosition();

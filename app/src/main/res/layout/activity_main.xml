@@ -25,9 +25,8 @@
             android:id="@+id/durationBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/btnPlay"
-            android:onClick="onTimeLineClick" />
+            android:layout_alignEnd="@+id/btnPlay"
+            android:layout_alignParentBottom="true" />
 
         <Button
             android:id="@+id/btnPlay"
@@ -43,7 +42,7 @@
             android:id="@+id/currentTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btnPlay"
+            android:layout_above="@+id/durationBar"
             android:layout_alignParentStart="true"
             android:text="currentTime" />
 
@@ -51,9 +50,18 @@
             android:id="@+id/totalDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btnPlay"
-            android:layout_toStartOf="@+id/btnPlay"
+            android:layout_above="@+id/durationBar"
+            android:layout_alignEnd="@+id/btnPlay"
             android:text="timeLeft" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="23dp"
+            android:layout_toEndOf="@+id/currentTime"
+            android:text="Next" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
