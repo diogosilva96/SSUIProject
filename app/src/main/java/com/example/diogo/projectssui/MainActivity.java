@@ -1,29 +1,35 @@
 package com.example.diogo.projectssui;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends Activity  {
 
-    private SurfaceView surfaceView;
-    private Button btnPlay;
+    private ImageButton btnPlay;
+    private ImageButton btnPrevious;
     private SeekBar timeLine;
     private MediaPlayer mediaPlayer = null;
     private TextView currentTime;
     private TextView totalDuration;
-    private Button btnNext;
+    private ImageButton btnNext;
     private int[] videos;
     private int currentArrayVideoPos;
 
@@ -33,6 +39,10 @@ public class MainActivity extends Activity  {
         setContentView(R.layout.activity_main);
         initVideoSet();
         init();
+        Intent i = new Intent(this,MediaViewer.class);
+        startActivity(i);
+
+
         timeLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -71,17 +81,16 @@ public class MainActivity extends Activity  {
 
     private void init() {
         // TODO Auto-generated method stub
-        surfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
-        btnPlay = (Button) findViewById(R.id.btnPlay);
         timeLine = (SeekBar) findViewById(R.id.durationBar);
         timeLine.setVisibility(View.INVISIBLE);
         currentTime = (TextView) findViewById(R.id.currentTime);
         totalDuration = (TextView) findViewById(R.id.totalDuration);
+        btnPlay = (ImageButton)findViewById(R.id.playStopButton);
+        btnPrevious = (ImageButton)findViewById(R.id.previousButton);
+        btnNext = (ImageButton)findViewById(R.id.nextButton);
     }
 
-    public void onClickBtnNext(View v){
-
-
+    public void NextCommand(View v){
             if (currentArrayVideoPos +1 < videos.length){
                 currentArrayVideoPos = currentArrayVideoPos +1;
                 if(mediaPlayer != null){
@@ -95,21 +104,33 @@ public class MainActivity extends Activity  {
             }
     }
 
-    public void PlayStop(View v){
+    public void PreviousCommand(View v){
+        if (currentArrayVideoPos != 0){
+            currentArrayVideoPos = currentArrayVideoPos -1;
+            if(mediaPlayer != null){
+                mediaPlayer.stop();
+                mediaPlayer.release();
+                mediaPlayer = null;
+
+            }
+            Toast.makeText(getApplicationContext(), ""+currentArrayVideoPos, Toast.LENGTH_LONG).show();
+            initVideoPlayer();
+        }
+    }
+
+    public void PlayPauseCommand(View v){
         try{
             if(mediaPlayer != null){
                 if(mediaPlayer.isPlaying()) {
-                    btnPlay.setText("Play");
-                    mediaPlayer.pause();
-                    Toast.makeText(getApplicationContext(), "Pausing!", Toast.LENGTH_LONG).show();
+                    Pause();
                 } else {
-                    btnPlay.setText("Pause");
-                    mediaPlayer.start();
-                    Toast.makeText(getApplicationContext(), "Playing!", Toast.LENGTH_LONG).show();
+                    Play();
                 }
             }
             else{
                 initVideoPlayer();
+                Play();
+
             }
 
         } catch (Exception e) {
@@ -117,27 +138,32 @@ public class MainActivity extends Activity  {
         }
     }
 
+    public void Pause(){
+        btnPlay.setBackgroundResource(R.drawable.play);
+        mediaPlayer.pause();
+        Toast.makeText(getApplicationContext(), "Pausing!", Toast.LENGTH_LONG).show();
+    }
+
+    public void Play(){
+        btnPlay.setBackgroundResource(R.drawable.pause);
+        mediaPlayer.start();
+        Toast.makeText(getApplicationContext(), "Playing!", Toast.LENGTH_LONG).show();
+    }
+
     private void initVideoPlayer(){
         getWindow().setFormat(PixelFormat.UNKNOWN);
         mediaPlayer = MediaPlayer.create(this, videos[currentArrayVideoPos]);
-        SurfaceHolder surfaceHolder = surfaceView.getHolder();
         timeLine.setVisibility(View.VISIBLE);
-        //surfaceHolder.setFixedSize(176, 144);
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        mediaPlayer.setDisplay(surfaceHolder);
         int mediaDuration = mediaPlayer.getDuration();
         timeLine.setMax(mediaDuration);
         String TotalDuration = CalculateTime(mediaDuration);
         totalDuration.setText(TotalDuration);
-        mediaPlayer.start();
-        btnPlay.setText("Pause");
-        Toast.makeText(getApplicationContext(), "Started video play", Toast.LENGTH_LONG).show();
     }
 
     private void initVideoSet(){
         videos = new int[2];
         videos[0] = R.raw.video1;
-        videos[1] = R.raw.videoplayback;
+        videos[1] = R.raw.sound_file_1;
         currentArrayVideoPos = 0;
     }
 
@@ -155,11 +181,8 @@ public class MainActivity extends Activity  {
 
     private String CalculateTime(int Time){// input is time in milliseconds
         long seconds = TimeUnit.MILLISECONDS.toSeconds(Time); //converts to seconds
-        String time =secondsToString(seconds);
+        String time =String.format("%02d:%02d:%02d",seconds/(60*60),seconds /60, seconds %60);// formata o tempo para uma string com(hour:minute:seconds)
         return time;
     }
 
-    private String secondsToString(long timeInSeconds){
-        return String.format("%02d:%02d:%02d",timeInSeconds/(60*60),timeInSeconds /60, timeInSeconds %60);// formata o tempo para uma string com(hour:minute:seconds)
-    }
 }
