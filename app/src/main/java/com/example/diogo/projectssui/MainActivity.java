@@ -39,8 +39,8 @@ public class MainActivity extends Activity  {
         setContentView(R.layout.activity_main);
         initVideoSet();
         init();
-        Intent i = new Intent(this,MediaViewer.class);
-        startActivity(i);
+        //Intent i = new Intent(this,MediaViewer.class);
+        //startActivity(i);
 
 
         timeLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -64,7 +64,7 @@ public class MainActivity extends Activity  {
         MainActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                monitorHandler.postDelayed(this, 250);//update de 250ms em 250ms
+                monitorHandler.postDelayed(this, 100);//update de 100ms em 100ms
                 monitorHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -129,7 +129,6 @@ public class MainActivity extends Activity  {
             }
             else{
                 initVideoPlayer();
-                Play();
 
             }
 
@@ -158,6 +157,7 @@ public class MainActivity extends Activity  {
         timeLine.setMax(mediaDuration);
         String TotalDuration = CalculateTime(mediaDuration);
         totalDuration.setText(TotalDuration);
+        Play();
     }
 
     private void initVideoSet(){
