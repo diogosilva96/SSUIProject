@@ -29,7 +29,7 @@ public class MediaViewer extends AppCompatActivity {
     private static String MODULE = "MediaViewer Activity";
     private ListView audioListView;
     private TextView titleText;
-    private ArrayList<String> audioListPath = new ArrayList<>();
+    private ArrayList<HashMap<String,String>> audioList = new ArrayList<HashMap<String, String>>();
     private ArrayList<String> audioListName = new ArrayList<>();
 
     @Override
@@ -41,7 +41,13 @@ public class MediaViewer extends AppCompatActivity {
         audioListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), audioListPath.get(position),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), audioListName.get(position),Toast.LENGTH_SHORT).show();
+                AudioList aList = new AudioList(audioList);
+                aList.setCurrentAudio(audioListName.get(position));
+                Intent intent = new Intent(MediaViewer.this, MainActivity.class);
+                intent.putExtra("AudioListClass", aList);
+                startActivity(intent);
+
             }
         });
 
@@ -64,15 +70,15 @@ public class MediaViewer extends AppCompatActivity {
 
             }
         }
-        getAllAudioMedia();
-        Log.e("Audio","AudioList size:"+audioListPath.size());
+        getAudioMedia();
+        Log.e("Audio","AudioList size:"+audioList.size());
         //Log.e("Audio","AudioList 1:"+audioList.get(0).get("file_path"));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,audioListName);
         audioListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
-    public void getAllAudioMedia(){
+    public void getAudioMedia(){
         ContentResolver contentResolver = getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {MediaStore.MediaColumns.DISPLAY_NAME};//dá só o display name
@@ -96,10 +102,10 @@ public class MediaViewer extends AppCompatActivity {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
-                    getAllAudioMedia();
+                    getAudioMedia();
                 } else {
                     // Permission Denied
-                    Toast.makeText(MediaViewer.this, "READ EXTERNAL STORAGE Denied", Toast.LENGTH_SHORT)
+                    Toast.makeText(MediaViewer.this, "READ EXTERNAL STORAGE DENIED", Toast.LENGTH_SHORT)
                             .show();
                 }
                 break;
@@ -116,14 +122,17 @@ public class MediaViewer extends AppCompatActivity {
         while(i < auxPath.length-1){
             i++;
         }
-        String filename = auxPath[i];
-        return filename;
+        return auxPath[i]; //filename
     }
 
     public void addToAudioList(Cursor cursor){
         String path = cursor.getString(0);
-        audioListPath.add(path);
-        audioListName.add(getFileName(path));
+        String name = getFileName(path);
+        HashMap<String,String> audioDescription = new HashMap<String,String>();
+        audioDescription.put("path",path);
+        audioDescription.put("name",name);
+        audioList.add(audioDescription);
+        audioListName.add(name);
     }
 }
 

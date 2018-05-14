@@ -19,6 +19,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends Activity  {
@@ -30,17 +32,23 @@ public class MainActivity extends Activity  {
     private TextView currentTime;
     private TextView totalDuration;
     private ImageButton btnNext;
+    private TextView tvAudioTitle;
     private int[] videos;
     private int currentArrayVideoPos;
+    private AudioList audioList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initVideoSet();
-        init();
+       
         //Intent i = new Intent(this,MediaViewer.class);
         //startActivity(i);
+        Intent intent = getIntent();
+        audioList = (AudioList)intent.getSerializableExtra("AudioListClass");
+        initVideoSet();
+        init();
+        initMediaPlayer();
 
 
         timeLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -68,7 +76,7 @@ public class MainActivity extends Activity  {
                 monitorHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mediaPlayerMonitor();
+                        durationBarUpdater();
                     }
                 });
             }
@@ -88,6 +96,8 @@ public class MainActivity extends Activity  {
         btnPlay = (ImageButton)findViewById(R.id.playStopButton);
         btnPrevious = (ImageButton)findViewById(R.id.previousButton);
         btnNext = (ImageButton)findViewById(R.id.nextButton);
+        tvAudioTitle = (TextView)findViewById(R.id.audioTitleText);
+        tvAudioTitle.setSelected(true);
     }
 
     public void NextCommand(View v){
@@ -100,7 +110,7 @@ public class MainActivity extends Activity  {
 
                 }
                 Toast.makeText(getApplicationContext(), ""+currentArrayVideoPos, Toast.LENGTH_LONG).show();
-                initVideoPlayer();
+                initMediaPlayer();
             }
     }
 
@@ -114,7 +124,7 @@ public class MainActivity extends Activity  {
 
             }
             Toast.makeText(getApplicationContext(), ""+currentArrayVideoPos, Toast.LENGTH_LONG).show();
-            initVideoPlayer();
+            initMediaPlayer();
         }
     }
 
@@ -128,7 +138,7 @@ public class MainActivity extends Activity  {
                 }
             }
             else{
-                initVideoPlayer();
+                initMediaPlayer();
 
             }
 
@@ -149,7 +159,7 @@ public class MainActivity extends Activity  {
         Toast.makeText(getApplicationContext(), "Playing!", Toast.LENGTH_LONG).show();
     }
 
-    private void initVideoPlayer(){
+    private void initMediaPlayer(){
         getWindow().setFormat(PixelFormat.UNKNOWN);
         mediaPlayer = MediaPlayer.create(this, videos[currentArrayVideoPos]);
         timeLine.setVisibility(View.VISIBLE);
@@ -157,6 +167,7 @@ public class MainActivity extends Activity  {
         timeLine.setMax(mediaDuration);
         String TotalDuration = CalculateTime(mediaDuration);
         totalDuration.setText(TotalDuration);
+        tvAudioTitle.setText(audioList.getCurrentAudioName());
         Play();
     }
 
@@ -168,7 +179,7 @@ public class MainActivity extends Activity  {
     }
 
 
-    private void mediaPlayerMonitor(){ //monitor que é chamado para atualizar a view
+    private void durationBarUpdater(){ //durationbarupdater que é chamado para atualizar a view
         if (mediaPlayer != null){
             //int mediaDuration = mediaPlayer.getDuration();
             int mediaPosition = mediaPlayer.getCurrentPosition();
