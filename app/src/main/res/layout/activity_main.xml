@@ -80,7 +80,7 @@
                 <SeekBar
                     android:id="@+id/durationBar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:layout_alignParentBottom="true"
                     android:layout_weight="1" />
             </LinearLayout>
@@ -112,7 +112,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="90dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -125,8 +126,8 @@
 
                     <ImageButton
                         android:id="@+id/previousButton"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_weight="1"
                         android:background="@drawable/previous"
                         android:onClick="PreviousCommand" />
@@ -134,10 +135,13 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
                     android:orientation="vertical"
-                    android:visibility="invisible"></LinearLayout>
+                    android:visibility="visible">
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -150,20 +154,24 @@
 
                     <ImageButton
                         android:id="@+id/playStopButton"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_centerHorizontal="true"
                         android:layout_weight="1"
                         android:background="@drawable/play"
+                        android:cropToPadding="false"
                         android:onClick="PlayPauseCommand" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal|clip_horizontal"
                     android:orientation="vertical"
-                    android:visibility="invisible"></LinearLayout>
+                    android:visibility="visible">
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -175,8 +183,8 @@
 
                     <ImageButton
                         android:id="@+id/nextButton"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_weight="1"
                         android:background="@drawable/next"
                         android:onClick="NextCommand" />

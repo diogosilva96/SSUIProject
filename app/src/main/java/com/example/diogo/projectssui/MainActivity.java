@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -14,6 +15,10 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -89,6 +94,9 @@ public class MainActivity extends Activity  {
 
     private void init() {
         // TODO Auto-generated method stub
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.setStatusBarColor(Color.GRAY);
         timeLine = (SeekBar) findViewById(R.id.durationBar);
         timeLine.setVisibility(View.INVISIBLE);
         currentTime = (TextView) findViewById(R.id.currentTime);
@@ -109,8 +117,9 @@ public class MainActivity extends Activity  {
                     mediaPlayer = null;
 
                 }
-                Toast.makeText(getApplicationContext(), ""+currentArrayVideoPos, Toast.LENGTH_LONG).show();
+                audioList.nextAudio();
                 initMediaPlayer();
+                didTapButton(v,btnNext);
             }
     }
 
@@ -123,8 +132,9 @@ public class MainActivity extends Activity  {
                 mediaPlayer = null;
 
             }
-            Toast.makeText(getApplicationContext(), ""+currentArrayVideoPos, Toast.LENGTH_LONG).show();
+            audioList.previousAudio();
             initMediaPlayer();
+            didTapButton(v,btnPrevious);
         }
     }
 
@@ -135,13 +145,14 @@ public class MainActivity extends Activity  {
                     Pause();
                 } else {
                     Play();
+
                 }
             }
             else{
                 initMediaPlayer();
 
             }
-
+            didTapButton(v,btnPlay);
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -168,7 +179,7 @@ public class MainActivity extends Activity  {
         String TotalDuration = CalculateTime(mediaDuration);
         totalDuration.setText(TotalDuration);
         tvAudioTitle.setText(audioList.getCurrentAudioName());
-        Play();
+        btnPlay.setBackgroundResource(R.drawable.play);
     }
 
     private void initVideoSet(){
@@ -189,7 +200,12 @@ public class MainActivity extends Activity  {
             currentTime.setText(CurrentTime);
         }
     }
-
+    public void didTapButton(View view,ImageButton btn){
+        final Animation bounceAnim = AnimationUtils.loadAnimation(this,R.anim.bounce);
+        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.1, 10);
+        bounceAnim.setInterpolator(interpolator);
+        btn.startAnimation(bounceAnim);
+    }
     private String CalculateTime(int Time){// input is time in milliseconds
         long seconds = TimeUnit.MILLISECONDS.toSeconds(Time); //converts to seconds
         String time =String.format("%02d:%02d:%02d",seconds/(60*60),seconds /60, seconds %60);// formata o tempo para uma string com(hour:minute:seconds)

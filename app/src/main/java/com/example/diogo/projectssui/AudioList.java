@@ -37,7 +37,7 @@ public class AudioList implements Serializable { //se for preciso para passar o 
     }
 
     public void nextAudio(){
-        if (currentPosition < audioList.size()) {
+        if (currentPosition < audioList.size()-1) {
             currentPosition = currentPosition + 1;
         } else {
             currentPosition = 0;

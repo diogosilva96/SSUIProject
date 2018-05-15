@@ -5,6 +5,8 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -26,7 +30,6 @@ public class MediaViewer extends AppCompatActivity {
 
     private static final int  MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 0;
 
-    private static String MODULE = "MediaViewer Activity";
     private ListView audioListView;
     private TextView titleText;
     private ArrayList<HashMap<String,String>> audioList = new ArrayList<HashMap<String, String>>();
@@ -36,8 +39,8 @@ public class MediaViewer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_viewer);
-        audioListView = findViewById(R.id.audioList);
-        titleText = findViewById(R.id.titleText);
+        init();
+
         audioListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -77,7 +80,13 @@ public class MediaViewer extends AppCompatActivity {
         audioListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
+    private void init(){
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.setStatusBarColor(Color.GRAY);
+        audioListView = findViewById(R.id.audioList);
+        titleText = findViewById(R.id.titleText);
+    }
     public void getAudioMedia(){
         ContentResolver contentResolver = getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
