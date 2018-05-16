@@ -96,7 +96,7 @@ public class MainActivity extends Activity  {
         // TODO Auto-generated method stub
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        window.setStatusBarColor(Color.GRAY);
+        window.setStatusBarColor(Color.BLACK);
         timeLine = (SeekBar) findViewById(R.id.durationBar);
         timeLine.setVisibility(View.INVISIBLE);
         currentTime = (TextView) findViewById(R.id.currentTime);
@@ -119,7 +119,7 @@ public class MainActivity extends Activity  {
                 }
                 audioList.nextAudio();
                 initMediaPlayer();
-                didTapButton(v,btnNext);
+
             }
     }
 
@@ -134,7 +134,6 @@ public class MainActivity extends Activity  {
             }
             audioList.previousAudio();
             initMediaPlayer();
-            didTapButton(v,btnPrevious);
         }
     }
 
@@ -150,12 +149,15 @@ public class MainActivity extends Activity  {
             }
             else{
                 initMediaPlayer();
-
             }
             didTapButton(v,btnPlay);
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void ReplayCommand(View v){
+         mediaPlayer.seekTo(0);
     }
 
     public void Pause(){
@@ -200,7 +202,7 @@ public class MainActivity extends Activity  {
             currentTime.setText(CurrentTime);
         }
     }
-    public void didTapButton(View view,ImageButton btn){
+    public void didTapButton(View view,ImageButton btn){ //se for preciso
         final Animation bounceAnim = AnimationUtils.loadAnimation(this,R.anim.bounce);
         MyBounceInterpolator interpolator = new MyBounceInterpolator(0.1, 10);
         bounceAnim.setInterpolator(interpolator);

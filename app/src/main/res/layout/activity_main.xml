@@ -9,7 +9,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#1c1c1c"
+        android:theme="@style/AppTheme.CustomRipple">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,6 +32,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:text="SSUI MusicPlayer"
+                android:textColor="?android:attr/colorButtonNormal"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -51,6 +54,7 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:text="Music Playing............................... WOW !"
+                android:textColor="?android:attr/colorButtonNormal"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -82,7 +86,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:progressTint="@android:color/white"
+                    android:progressBackgroundTint="@android:color/darker_gray"
+                    android:thumbTint="@android:color/white"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -97,7 +105,8 @@
                     android:layout_above="@+id/durationBar"
                     android:layout_alignParentStart="true"
                     android:layout_weight="1"
-                    android:text="currentTime" />
+                    android:text="currentTime"
+                    android:textColor="?android:attr/colorButtonNormal" />
 
                 <TextView
                     android:id="@+id/totalDuration"
@@ -107,7 +116,8 @@
                     android:layout_below="@+id/playStopButton"
                     android:layout_weight="1"
                     android:text="timeLeft"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textColor="?android:attr/colorButtonNormal" />
             </LinearLayout>
 
             <LinearLayout
@@ -119,28 +129,30 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/previousButton"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/previous"
-                        android:onClick="PreviousCommand" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_vertical|center_horizontal"
                     android:orientation="vertical"
                     android:visibility="visible">
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/previousButton"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_weight="0"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:onClick="PreviousCommand"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/previous" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -154,23 +166,13 @@
 
                     <ImageButton
                         android:id="@+id/playStopButton"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_centerHorizontal="true"
                         android:layout_weight="1"
                         android:background="@drawable/play"
-                        android:cropToPadding="false"
-                        android:onClick="PlayPauseCommand" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|center_horizontal|clip_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
+                        android:onClick="PlayPauseCommand"
+                        android:scaleType="fitCenter" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -178,17 +180,36 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="left|center_vertical"
+                    android:gravity="center_vertical|center"
                     android:orientation="vertical">
 
                     <ImageButton
                         android:id="@+id/nextButton"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/next"
-                        android:onClick="NextCommand" />
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_weight="0"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:onClick="NextCommand"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/next" />
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/replay" />
                 </LinearLayout>
 
             </LinearLayout>
