@@ -6,17 +6,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Created by Diogo on 14/05/2018.
  */
 
 public class AudioList implements Serializable { //se for preciso para passar o objeto no intent
-    private ArrayList<HashMap<String,String>> audioList;
+    private ArrayList<String> audioList;
     private int currentPosition;
+    private ArrayList<Integer> playedList;//substituir isto com a posiçao do audiolist
+    private boolean Shuffle;
 
-    public AudioList(ArrayList<HashMap<String,String>> aList){
+    public AudioList(ArrayList<String> aList){
         audioList = aList;
+        playedList = new ArrayList<Integer>();
+        Shuffle = true;
     }
 
 
@@ -27,39 +32,127 @@ public class AudioList implements Serializable { //se for preciso para passar o 
             if (valueFound){
                 break;
             }
-            HashMap<String, String> audioFile = audioList.get(i);
-            if (audioFile.get("name").equals(name)){
+
+            if (getFileName(audioList.get(i)).equals(name)){
                 valueFound = true;
                 currentPosition = i;
             }
         }
-        Log.e("AudioList","Value for:"+name+" found:" +valueFound + " currentPosition on List:" +currentPosition);
+        Log.e("AudioList","Value for:"+name+" found:" +valueFound + " currentPosition on List:" +currentPosition + " Path: "+audioList.get(currentPosition));
     }
-
-    public void nextAudio(){
-        if (currentPosition < audioList.size()-1) {
-            currentPosition = currentPosition + 1;
-        } else {
-            currentPosition = 0;
-        }
-    }
-
-    public String getCurrentAudioPath(){
-        return audioList.get(currentPosition).get("path");
-    }
-
-    public String getCurrentAudioName(){
-        Log.e("AudioList", audioList.get(currentPosition).get("name"));
-        return audioList.get(currentPosition).get("name");
+    public void setShuffleMode(boolean shuffle){
+        Shuffle = shuffle;
     }
 
     public void previousAudio(){
-        if (currentPosition != 0){
-            currentPosition = currentPosition -1;
-        } else {
-            currentPosition = audioList.size()-1;
+        addToPlayedList();
+        if(!Shuffle) {
+            if (currentPosition != 0) {
+                currentPosition = currentPosition - 1;
+            } else {
+                currentPosition = audioList.size() - 1;
+            }
+        } else {// VERIFICAR ISTO
+            int previousPosition = getPreviousPlayedAudioPosition();
+            if (previousPosition != -1) {
+                currentPosition = previousPosition;
+
+            } else {
+                //fica igual
+            }
         }
     }
 
+    public void nextAudio(){
+        addToPlayedList();
+        if(!Shuffle){
+            if (currentPosition < audioList.size()-1) {
+                currentPosition = currentPosition + 1;
+            } else {
+                currentPosition = 0;
+            }
+        } else {
+            clearIfEndOfPlayedList();
+            currentPosition = generateRandomPosition();
+        }
+    }
 
+    private void addToPlayedList(){
+        boolean positionExists = true;
+        if(playedList.size()>0) {
+            for (int i = 0; i < playedList.size(); i++) {
+                Log.e("AudioList", "size:"+playedList.size()+"currentPos:" + currentPosition + " playedList.get(" + i + ")=" + playedList.get(i));
+                if (playedList.get(i) == currentPosition) {
+                    positionExists = true;
+                    break;
+                } else {
+                    positionExists = false;
+                }
+            }
+            if (!positionExists) {
+                playedList.add(currentPosition);//adiciona a lista de audio que já foi reproduzido
+            }
+        } else {
+            playedList.add(currentPosition);
+        }
+    }
+    private int getPreviousPlayedAudioPosition(){
+        int position= -1;
+        if(playedList.size()>1)
+        {
+            playedList.remove(playedList.size()-1); //remove da playedlisto o som atual
+            position = playedList.get(playedList.size()-1); //vai buscar a posição do anterior
+
+        }
+        return position;
+    }
+
+
+    private boolean checkPlayedList(int position){
+        boolean alreadyPlayed = false;
+        for (int i = 0; i < playedList.size(); i++) {
+            if (position==playedList.get(i)) {
+                alreadyPlayed = true;
+            }
+            if (alreadyPlayed) {
+                break;
+            }
+        }
+        return alreadyPlayed;
+    }
+
+    private void clearIfEndOfPlayedList(){
+        if (playedList.size()==audioList.size()){
+            playedList.clear();
+        }
+    }
+    private int generateRandomPosition(){
+        Random random = new Random();
+        int position = 0;
+        boolean PositionFound = false;
+        while (!PositionFound){
+            position = random.nextInt(audioList.size());
+            PositionFound= !checkPlayedList(position);
+        }
+        return position;
+    }
+
+    public String getCurrentAudioPath(){
+        return audioList.get(currentPosition);
+    }
+
+    public String getCurrentAudioName(){
+        return getFileName(audioList.get(currentPosition));
+    }
+
+
+    public String getFileName(String path){
+        String[] auxPath = path.split("/");
+
+        int i = 0;
+        while(i < auxPath.length-1){
+            i++;
+        }
+        return auxPath[i];
+    }
 }

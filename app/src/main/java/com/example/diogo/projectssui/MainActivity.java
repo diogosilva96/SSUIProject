@@ -9,6 +9,7 @@ import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,9 +40,8 @@ public class MainActivity extends Activity  {
     private TextView totalDuration;
     private ImageButton btnNext;
     private TextView tvAudioTitle;
-    private int[] videos;
-    private int currentArrayVideoPos;
     private AudioList audioList;
+    public boolean wasPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,6 @@ public class MainActivity extends Activity  {
         //startActivity(i);
         Intent intent = getIntent();
         audioList = (AudioList)intent.getSerializableExtra("AudioListClass");
-        initVideoSet();
         init();
         initMediaPlayer();
 
@@ -109,32 +109,35 @@ public class MainActivity extends Activity  {
     }
 
     public void NextCommand(View v){
-            if (currentArrayVideoPos +1 < videos.length){
-                currentArrayVideoPos = currentArrayVideoPos +1;
-                if(mediaPlayer != null){
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-                    mediaPlayer = null;
 
-                }
-                audioList.nextAudio();
-                initMediaPlayer();
-
+        if(mediaPlayer != null){
+            if(mediaPlayer.isPlaying()){
+                wasPlaying = true;
+            } else {
+                wasPlaying = false;
             }
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        audioList.nextAudio();
+        initMediaPlayer();
     }
 
     public void PreviousCommand(View v){
-        if (currentArrayVideoPos != 0){
-            currentArrayVideoPos = currentArrayVideoPos -1;
-            if(mediaPlayer != null){
-                mediaPlayer.stop();
-                mediaPlayer.release();
-                mediaPlayer = null;
-
+        if(mediaPlayer != null){
+            if(mediaPlayer.isPlaying()){
+                wasPlaying = true;
+            } else {
+                wasPlaying = false;
             }
-            audioList.previousAudio();
-            initMediaPlayer();
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+
         }
+        audioList.previousAudio();
+        initMediaPlayer();
     }
 
     public void PlayPauseCommand(View v){
@@ -157,46 +160,44 @@ public class MainActivity extends Activity  {
     }
 
     public void ReplayCommand(View v){
-         mediaPlayer.seekTo(0);
+
+        if (mediaPlayer != null){
+        mediaPlayer.seekTo(0);
+        }
     }
 
     public void Pause(){
-        btnPlay.setBackgroundResource(R.drawable.play);
+        btnPlay.setImageResource(R.drawable.play);
         mediaPlayer.pause();
         Toast.makeText(getApplicationContext(), "Pausing!", Toast.LENGTH_LONG).show();
     }
 
     public void Play(){
-        btnPlay.setBackgroundResource(R.drawable.pause);
+        btnPlay.setImageResource(R.drawable.pause);
         mediaPlayer.start();
         Toast.makeText(getApplicationContext(), "Playing!", Toast.LENGTH_LONG).show();
     }
 
     private void initMediaPlayer(){
         getWindow().setFormat(PixelFormat.UNKNOWN);
-        mediaPlayer = MediaPlayer.create(this, videos[currentArrayVideoPos]);
+        mediaPlayer = MediaPlayer.create(this, Uri.parse(Environment.getExternalStorageDirectory().getPath()+audioList.getCurrentAudioPath()));
         timeLine.setVisibility(View.VISIBLE);
         int mediaDuration = mediaPlayer.getDuration();
         timeLine.setMax(mediaDuration);
         String TotalDuration = CalculateTime(mediaDuration);
         totalDuration.setText(TotalDuration);
         tvAudioTitle.setText(audioList.getCurrentAudioName());
-        btnPlay.setBackgroundResource(R.drawable.play);
+        btnPlay.setImageResource(R.drawable.play);
+        if(wasPlaying){
+            Play();
+        }
     }
 
-    private void initVideoSet(){
-        videos = new int[2];
-        videos[0] = R.raw.video1;
-        videos[1] = R.raw.sound_file_1;
-        currentArrayVideoPos = 0;
-    }
 
 
     private void durationBarUpdater(){ //durationbarupdater que é chamado para atualizar a view
         if (mediaPlayer != null){
-            //int mediaDuration = mediaPlayer.getDuration();
             int mediaPosition = mediaPlayer.getCurrentPosition();
-            //timeLine.setMax(mediaDuration);
             timeLine.setProgress(mediaPosition);
             String CurrentTime = CalculateTime(mediaPosition);
             currentTime.setText(CurrentTime);
@@ -204,14 +205,20 @@ public class MainActivity extends Activity  {
     }
     public void didTapButton(View view,ImageButton btn){ //se for preciso
         final Animation bounceAnim = AnimationUtils.loadAnimation(this,R.anim.bounce);
-        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.1, 10);
+        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 20);
         bounceAnim.setInterpolator(interpolator);
         btn.startAnimation(bounceAnim);
     }
     private String CalculateTime(int Time){// input is time in milliseconds
         long seconds = TimeUnit.MILLISECONDS.toSeconds(Time); //converts to seconds
-        String time =String.format("%02d:%02d:%02d",seconds/(60*60),seconds /60, seconds %60);// formata o tempo para uma string com(hour:minute:seconds)
-        return time;
+        long Hours = seconds/(60*60);
+        long Minutes = seconds/60;
+        long Seconds = seconds %60;
+        if (Hours != 0){
+             return String.format("%02d:%02d:%02d",Hours,Minutes, Seconds);// formata o tempo para uma string com(hour:minute:seconds)
+        } else {
+            return String.format("%02d:%02d",Minutes,Seconds); //formata o tempo para uma string com(minute:seconds)
+        }
     }
 
 }

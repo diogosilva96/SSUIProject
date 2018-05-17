@@ -53,7 +53,7 @@
                 android:padding="5dip"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:text="Music Playing............................... WOW !"
+                android:text="Music Playing"
                 android:textColor="?android:attr/colorButtonNormal"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -78,53 +78,74 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <SeekBar
-                    android:id="@+id/durationBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_weight="1"
-                    android:progressTint="@android:color/white"
-                    android:progressBackgroundTint="@android:color/darker_gray"
-                    android:thumbTint="@android:color/white"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/currentTime"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0px"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/durationBar"
-                    android:layout_alignParentStart="true"
                     android:layout_weight="1"
-                    android:text="currentTime"
-                    android:textColor="?android:attr/colorButtonNormal" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/totalDuration"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/currentTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_above="@+id/durationBar"
+                        android:layout_alignParentStart="true"
+                        android:layout_weight="1"
+                        android:text="00:00:00"
+                        android:textAlignment="viewEnd"
+                        android:textColor="?android:attr/colorButtonNormal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0px"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_below="@+id/playStopButton"
+                    android:layout_weight="4"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <SeekBar
+                        android:id="@+id/durationBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:layout_weight="1"
+                        android:progressBackgroundTint="@android:color/darker_gray"
+                        android:progressTint="@android:color/white"
+                        android:thumbTint="@android:color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="timeLeft"
-                    android:textAlignment="textEnd"
-                    android:textColor="?android:attr/colorButtonNormal" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/totalDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@+id/playStopButton"
+                        android:layout_weight="1"
+                        android:text="00:00:00"
+                        android:textAlignment="viewStart"
+                        android:textColor="?android:attr/colorButtonNormal" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clipChildren="false">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -148,7 +169,6 @@
                         android:id="@+id/previousButton"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_weight="0"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="PreviousCommand"
                         android:scaleType="fitCenter"
@@ -168,11 +188,10 @@
                         android:id="@+id/playStopButton"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_weight="1"
-                        android:background="@drawable/play"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="PlayPauseCommand"
-                        android:scaleType="fitCenter" />
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/play" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -187,7 +206,6 @@
                         android:id="@+id/nextButton"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_weight="0"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="NextCommand"
                         android:scaleType="fitCenter"
@@ -204,10 +222,11 @@
                     android:visibility="visible">
 
                     <ImageButton
-                        android:id="@+id/imageButton"
+                        android:id="@+id/replayButton"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:onClick="ReplayCommand"
                         android:scaleType="fitCenter"
                         android:src="@drawable/replay" />
                 </LinearLayout>

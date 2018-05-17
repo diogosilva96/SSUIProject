@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 
 public class MediaViewer extends AppCompatActivity {
 
@@ -32,7 +33,7 @@ public class MediaViewer extends AppCompatActivity {
 
     private ListView audioListView;
     private TextView titleText;
-    private ArrayList<HashMap<String,String>> audioList = new ArrayList<HashMap<String, String>>();
+    private ArrayList<String> audioList = new ArrayList<String>();
     private ArrayList<String> audioListName = new ArrayList<>();
 
     @Override
@@ -134,14 +135,17 @@ public class MediaViewer extends AppCompatActivity {
         return auxPath[i]; //filename
     }
 
+    public String getFilePath(String path){
+        String regex = "/storage/emulated/0";
+        return path.replaceAll(regex, Matcher.quoteReplacement(""));
+
+    }
+
     public void addToAudioList(Cursor cursor){
         String path = cursor.getString(0);
-        String name = getFileName(path);
-        HashMap<String,String> audioDescription = new HashMap<String,String>();
-        audioDescription.put("path",path);
-        audioDescription.put("name",name);
-        audioList.add(audioDescription);
-        audioListName.add(name);
+        audioListName.add(getFileName(path));
+        audioList.add(getFilePath(path));
+
     }
 }
 
