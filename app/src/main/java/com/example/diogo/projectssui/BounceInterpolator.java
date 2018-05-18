@@ -6,11 +6,11 @@ import android.view.animation.Interpolator;
  * Created by Diogo on 15/05/2018.
  */
 
-public class MyBounceInterpolator implements Interpolator {
+public class BounceInterpolator implements Interpolator {
     private double _Amplitude = 1;
     private double _Frequency = 10;
 
-    MyBounceInterpolator(double amplitude, double frequency) {
+    BounceInterpolator(double amplitude, double frequency) {
         _Amplitude = amplitude;
         _Frequency = frequency;
     }

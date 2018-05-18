@@ -15,13 +15,13 @@ import java.util.Random;
 public class AudioList implements Serializable { //se for preciso para passar o objeto no intent
     private ArrayList<String> audioList;
     private int currentPosition;
-    private ArrayList<Integer> playedList;//substituir isto com a posiçao do audiolist
+    private ArrayList<Integer> playedList;//list auxiliar para o modo shuffle para saber o que é que já foi played
     private boolean Shuffle;
 
     public AudioList(ArrayList<String> aList){
         audioList = aList;
         playedList = new ArrayList<Integer>();
-        Shuffle = true;
+        Shuffle = false;
     }
 
 
@@ -42,6 +42,13 @@ public class AudioList implements Serializable { //se for preciso para passar o 
     }
     public void setShuffleMode(boolean shuffle){
         Shuffle = shuffle;
+        if(Shuffle){
+            addToPlayedList();
+        }
+    }
+
+    public boolean getShuffleMode(){
+        return Shuffle;
     }
 
     public void previousAudio(){
@@ -81,7 +88,7 @@ public class AudioList implements Serializable { //se for preciso para passar o 
         boolean positionExists = true;
         if(playedList.size()>0) {
             for (int i = 0; i < playedList.size(); i++) {
-                Log.e("AudioList", "size:"+playedList.size()+"currentPos:" + currentPosition + " playedList.get(" + i + ")=" + playedList.get(i));
+                Log.e("AudioList", "size:"+playedList.size()+" currentPos:" + currentPosition + " playedList.get(" + i + ")=" + playedList.get(i));
                 if (playedList.get(i) == currentPosition) {
                     positionExists = true;
                     break;
@@ -123,6 +130,7 @@ public class AudioList implements Serializable { //se for preciso para passar o 
 
     private void clearIfEndOfPlayedList(){
         if (playedList.size()==audioList.size()){
+            Log.e("AudioList","playedList cleared!");
             playedList.clear();
         }
     }
