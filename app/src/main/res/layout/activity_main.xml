@@ -18,7 +18,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="40"
+            android:layout_weight="45"
             android:orientation="horizontal">
 
             <ImageView
@@ -41,11 +41,12 @@
                 android:textStyle="bold" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/fileButton"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:onClick="handleFilesClick"
                 android:scaleType="fitCenter"
                 android:src="@drawable/filemenu1" />
 
@@ -54,7 +55,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="15"
+            android:layout_weight="20"
+            android:gravity="center_vertical|center_horizontal"
             android:orientation="vertical">
 
             <TextView
@@ -74,11 +76,12 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="0px"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
                 android:src="@drawable/music" />
+
         </LinearLayout>
 
         <LinearLayout

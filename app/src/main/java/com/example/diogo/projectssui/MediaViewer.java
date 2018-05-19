@@ -60,6 +60,8 @@ public class MediaViewer extends AppCompatActivity {
         {
             // Permission is not granted
             // Should we show an explanation?
+            //finish();
+            //System.exit(0);
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 // Show an explanation to the user *asynchronously* -- don't block
