@@ -1,6 +1,7 @@
 package com.example.diogo.projectssui;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,12 +28,14 @@ public class MainActivity extends Activity  {
     private ImageButton btnPrevious;
     private ImageButton btnShuffle;
     private ImageButton btnNext;
+    private ImageButton btnFiles;
     private SeekBar timeLine;
     private MediaPlayer mediaPlayer = null;
     private TextView currentTime;
     private TextView totalDuration;
     private TextView tvAudioTitle;
     private AudioList audioList;
+
 
     public boolean wasPlaying = false;
 
@@ -150,6 +154,10 @@ public class MainActivity extends Activity  {
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void handleFilesClick(View v) {
+        finish();// volta activity anterior
     }
 
     public void handleReplayClick(View v){
