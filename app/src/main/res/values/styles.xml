@@ -11,5 +11,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-
+    <style name="AppTheme.CustomRipple">
+        <item name="colorControlHighlight">@android:color/darker_gray</item>
+    </style>
 </resources>
