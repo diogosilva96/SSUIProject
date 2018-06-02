@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class MediaViewer extends AppCompatActivity {
@@ -46,12 +44,11 @@ public class MediaViewer extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(), audioListName.get(position),Toast.LENGTH_SHORT).show();
-                AudioList aList = new AudioList(audioList);
-                aList.setCurrentAudio(audioListName.get(position));
-                Intent intent = new Intent(MediaViewer.this, MainActivity.class);
-                intent.putExtra("AudioListClass", aList);
+                AudioListManipulator aListManipulator = new AudioListManipulator(audioList);
+                aListManipulator.setCurrentAudio(audioListName.get(position));
+                Intent intent = new Intent(MediaViewer.this, MediaPlayer.class);
+                intent.putExtra("AudioListManipulator", aListManipulator);
                 startActivity(intent);
-
             }
         });
 
@@ -77,8 +74,7 @@ public class MediaViewer extends AppCompatActivity {
             }
         }
         getAudioMedia();
-        Log.e("Audio","AudioList size:"+audioList.size());
-        //Log.e("Audio","AudioList 1:"+audioList.get(0).get("file_path"));
+        Log.e("Audio","AudioListManipulator size:"+audioList.size());
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,audioListName);
         audioListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();

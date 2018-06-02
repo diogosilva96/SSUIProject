@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.diogo.projectssui.MainActivity">
+    tools:context="com.example.diogo.projectssui.MediaPlayer">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -13,12 +13,15 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:theme="@style/AppTheme.CustomRipple"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="45"
+            android:layout_weight="50"
             android:orientation="horizontal">
 
             <ImageView
@@ -27,14 +30,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/musicicon" />
+                android:src="@drawable/ic_music" />
 
             <TextView
                 android:id="@+id/appNameText"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:text="SSUI MusicPlayer"
                 android:textColor="?android:attr/colorButtonNormal"
                 android:textSize="24sp"
@@ -44,11 +47,11 @@
                 android:id="@+id/fileButton"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="0.4"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:onClick="handleFilesClick"
                 android:scaleType="fitCenter"
-                android:src="@drawable/filemenu1" />
+                android:src="@drawable/ic_filemenu" />
 
         </LinearLayout>
 
@@ -62,8 +65,8 @@
             <TextView
                 android:id="@+id/audioTitleText"
                 android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:layout_weight="0.1"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:padding="5dip"
@@ -75,12 +78,12 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="0px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/music" />
+                android:src="@drawable/ic_music_play" />
 
         </LinearLayout>
 
@@ -98,11 +101,11 @@
 
                 <TextView
                     android:id="@+id/currentTime"
-                    android:layout_width="0px"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_above="@+id/durationBar"
                     android:layout_alignParentStart="true"
-                    android:layout_weight="1"
+                    android:layout_weight="0"
                     android:text="00:00:00"
                     android:textAlignment="viewEnd"
                     android:textColor="?android:attr/colorButtonNormal"
@@ -110,21 +113,21 @@
 
                 <SeekBar
                     android:id="@+id/durationBar"
-                    android:layout_width="0px"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
-                    android:layout_weight="5"
+                    android:layout_weight="1"
                     android:progressBackgroundTint="@android:color/darker_gray"
                     android:progressTint="@android:color/white"
                     android:thumbTint="@android:color/white" />
 
                 <TextView
                     android:id="@+id/totalDuration"
-                    android:layout_width="0px"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/playStopButton"
-                    android:layout_weight="1"
+                    android:layout_weight="0"
                     android:text="00:00:00"
                     android:textAlignment="viewStart"
                     android:textColor="?android:attr/colorButtonNormal"
@@ -144,55 +147,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:gravity="right|center_vertical|center_horizontal"
                     android:orientation="vertical">
 
                     <ImageButton
                         android:id="@+id/shuffleButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="0px"
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="handleShuffleClick"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/shuffleoff" />
+                        android:src="@drawable/ic_shuffle_off" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.01"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:gravity="right|center_vertical|center_horizontal"
                     android:orientation="vertical">
 
                     <ImageButton
                         android:id="@+id/previousButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="0px"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="handlePreviousClick"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/previous" />
+                        android:src="@drawable/ic_previous" />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -203,69 +188,51 @@
 
                     <ImageButton
                         android:id="@+id/playStopButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="0px"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="handlePlayPauseClick"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/play" />
+                        android:src="@drawable/ic_play" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.01"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:gravity="left|center_vertical|center_horizontal"
                     android:orientation="vertical">
 
                     <ImageButton
                         android:id="@+id/nextButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="0px"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="handleNextClick"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/next" />
+                        android:src="@drawable/ic_next" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:gravity="left|center_vertical|center_horizontal"
                     android:orientation="vertical">
 
                     <ImageButton
                         android:id="@+id/replayButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="0px"
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="handleReplayClick"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/replay" />
+                        android:src="@drawable/ic_replay" />
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
 
             </LinearLayout>
 
